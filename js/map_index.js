@@ -29,10 +29,6 @@
                   // 'marker': dataset
             });
             
-            $.ajax({
-                  type:'get',
-                  url:'http://wenyu.3eeweb.com/weather.php'
-            });
             
             var datajson = $.getJSON('data.json', function (data) {
                   $.each(data, function (i, marker) {
