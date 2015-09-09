@@ -40,7 +40,7 @@
                               var obj = {};
                               obj.text = marker.Name + "<BR/>" + marker.City + "<BR/>" + marker.Feature;
                               obj.addr = [a[0], a[1]];
-                              
+                              dataset.push(obj);
                               //$('#map').gmap('openInfoWindow', { 'content': marker.Name }, this);
                               if (marker.City == "") {
                                     marker.City = "無縣市資訊";
@@ -76,8 +76,32 @@
 
                   });
             });
+            var datajson3 = $.getJSON('data4.json', function (data) {
+                  $.each(data, function (i, marker) {
 
-            $.when(datajson, datajson2).done(function () {
+                        var a = marker.Coordinate.split(',');
+                        //console.log(a);
+                        if (a[0]) {
+
+                              var obj = {};
+                              obj.text = marker.Name + "<BR/>" + marker.City + "<BR/>" + marker.FoodFeature;
+                              obj.addr = [a[0], a[1]];
+                              dataset.push(obj);
+                              //$('#map').gmap('openInfoWindow', { 'content': marker.Name }, this);
+                              if (marker.City == "") {
+                                    marker.City = "無縣市資訊";
+                              }
+                              if (!city[marker.City]) {
+                                    city[marker.City] = [];
+                                    city[marker.City].push(obj);
+                              } else {
+                                    city[marker.City].push(obj);
+                              }
+
+                        }
+                  });
+            });
+            $.when(datajson, datajson2, datajson3).done(function () {
 
                   $(".bs-docs-featurette-title").click(function () {
                         map.tinyMap('clear');
@@ -85,7 +109,7 @@
                   select_scope.city_select = Object.keys(city)[0];
 
                   var city_array = Object.keys(city);
-                  //console.log(city_array);
+                  //console.log(dataset);
                   
                   for (var i in city["無縣市資訊"]) {
                         var content = city["無縣市資訊"][i].text;
