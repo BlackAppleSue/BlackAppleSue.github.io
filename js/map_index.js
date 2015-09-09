@@ -28,8 +28,8 @@
                   'zoom': 7,
                   // 'marker': dataset
             });
-            
-            
+
+
             var datajson = $.getJSON('data.json', function (data) {
                   $.each(data, function (i, marker) {
 
@@ -83,7 +83,34 @@
                         map.tinyMap('clear');
                   });
                   select_scope.city_select = Object.keys(city)[0];
+
+                  var city_array = Object.keys(city);
+                  //console.log(city_array);
+
+                  for (var i in city["無縣市資訊"]) {
+                        var content = city["無縣市資訊"][i].text;
+                        for (var j in city_array) {
+                              //console.log(city_array[i]);
+                              var find = content.indexOf(city_array[j].substring(0, 2));
+
+                              if (find != -1) {
+                                    //console.log(city_array[j]);
+                                    city[city_array[j]].push(city["無縣市資訊"][i]);
+
+                                    //delete city["無縣市資訊"][i];
+                                    break;
+                              }
+
+                        }
+                  }
+                  
+                  delete city["無縣市資訊"];
                   select_scope.$apply();
+
+
+
+
+
             });
       });
 
