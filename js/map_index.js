@@ -38,7 +38,7 @@
                         if (a[0]) {
 
                               var obj = {};
-                              obj.text = marker.Name + "<BR/>" + marker.Feature;
+                              obj.text = marker.Name + "<BR/>" + marker.City + "<BR/>" + marker.Feature;
                               obj.addr = [a[0], a[1]];
                               
                               //$('#map').gmap('openInfoWindow', { 'content': marker.Name }, this);
@@ -60,7 +60,7 @@
                   $.each(data.Infos.Info, function (i, marker) {
 
                         var obj = {};
-                        obj.text = marker.Name + "<BR/>" + marker.Toldescribe;
+                        obj.text = marker.Name + "<BR/>" + marker.Region + "<BR/>" + marker.Toldescribe;
                         obj.addr = [marker.Py, marker.Px];
                         dataset.push(obj);
                         if (marker.Region == "") {
@@ -86,30 +86,35 @@
 
                   var city_array = Object.keys(city);
                   //console.log(city_array);
-
+                  
                   for (var i in city["無縣市資訊"]) {
                         var content = city["無縣市資訊"][i].text;
+                        var find_index = 0;
+                        var choice_city = '';
                         for (var j in city_array) {
                               //console.log(city_array[i]);
+                              
                               var find = content.indexOf(city_array[j].substring(0, 2));
-
-                              if (find != -1) {
-                                    //console.log(city_array[j]);
-                                    city[city_array[j]].push(city["無縣市資訊"][i]);
-
-                                    //delete city["無縣市資訊"][i];
-                                    break;
+                              if (find != -1 && (find < find_index || find_index == 0)) {
+                                    find_index = find;
+                                    choice_city = j;
                               }
 
                         }
+                        if (city_array[choice_city]) {
+                              city[city_array[choice_city]].push(city["無縣市資訊"][i]);
+                        }
+
                   }
-                  
+
                   delete city["無縣市資訊"];
                   select_scope.$apply();
 
-
-
-
+                  map.tinyMap('modify', {
+                        marker: city[select_scope.city_select]
+                  });
+                  map.tinyMap('panTo', select_scope.city_select);
+                  select_scope.$apply();
 
             });
       });
