@@ -94,7 +94,7 @@
 
 
                   }
-
+                  select_scope.$apply();
                   // console.log(city_weather);
             });
 
@@ -123,6 +123,7 @@
 
                         }
                   });
+                  select_scope.$apply();
             });
 
             var datajson2 = $.getJSON('data3.json', function (data) {
@@ -144,6 +145,7 @@
                         //$('#map').gmap('openInfoWindow', { 'content': marker.Name }, this);					
 
                   });
+                  select_scope.$apply();
             });
             var datajson3 = $.getJSON('data4.json', function (data) {
                   $.each(data, function (i, marker) {
@@ -169,6 +171,7 @@
 
                         }
                   });
+                  select_scope.$apply();
             });
 
 
