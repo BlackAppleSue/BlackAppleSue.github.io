@@ -175,7 +175,7 @@
             });
 
 
-            $.when(map, get_city, datajson, datajson3).done(function () {
+            $.when(map, get_city, datajson,datajson2, datajson3).done(function () {
 
                   $(".bs-docs-featurette-title").click(function () {
                         map.tinyMap('clear');
