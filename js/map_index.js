@@ -11,7 +11,7 @@
 
       app.controller('select', function ($scope, $sce) {
             $scope.citys = city;
-            $scope.city_select = "";
+            $scope.city_select = "新竹市";
             //console.log($scope.city);
             select_scope = $scope;
             $scope.weather_infoshow = "";
