@@ -7,12 +7,15 @@
       var city_weather = {};
       var map;
 
+      var sce;
+
       app.controller('select', function ($scope, $sce) {
             $scope.citys = city;
             $scope.city_select = "";
             //console.log($scope.city);
             select_scope = $scope;
             $scope.weather_infoshow = "";
+            sce = $sce;
             $scope.change_map = function () {
                   map.tinyMap('clear');
                   map.tinyMap('modify', {
@@ -21,8 +24,8 @@
                   map.tinyMap('panTo', $scope.city_select);
                   //alert(1);
                   
-                  var go_city = $scope.city_select.replace('台','臺');
-                  
+                  var go_city = $scope.city_select.replace('台', '臺');
+
                   if (city_weather[go_city]) {
                         var info_w = city_weather[go_city].split('||');
                         $scope.weather_infoshow = $sce.trustAsHtml(go_city + ' 今日天氣' + "<BR/>" + "溫度 : " + info_w[0] + "下雨機率 : " + info_w[1]);
@@ -89,7 +92,7 @@
 
                   }
 
-                 // console.log(city_weather);
+                  // console.log(city_weather);
             });
 
 
@@ -197,6 +200,16 @@
                   }
 
                   delete city["無縣市資訊"];
+
+                  var go_city = select_scope.city_select.replace('台', '臺');
+
+                  if (city_weather[go_city]) {
+                        var info_w = city_weather[go_city].split('||');
+                        select_scope.weather_infoshow = sce.trustAsHtml(go_city + ' 今日天氣' + "<BR/>" + "溫度 : " + info_w[0] + "下雨機率 : " + info_w[1]);
+                  } else {
+                        select_scope.weather_infoshow = "";
+                  }
+
                   select_scope.$apply();
 
                   map.tinyMap('modify', {
