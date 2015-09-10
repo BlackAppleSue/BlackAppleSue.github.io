@@ -4,14 +4,15 @@
       var dataset = [];
       var city = {};
       var select_scope;
-
+      var city_weather = {};
       var map;
 
-      app.controller('select', function ($scope) {
+      app.controller('select', function ($scope, $sce) {
             $scope.citys = city;
             $scope.city_select = "";
             //console.log($scope.city);
             select_scope = $scope;
+            $scope.weather_infoshow = "";
             $scope.change_map = function () {
                   map.tinyMap('clear');
                   map.tinyMap('modify', {
@@ -19,6 +20,18 @@
                   });
                   map.tinyMap('panTo', $scope.city_select);
                   //alert(1);
+                  
+                  var go_city = $scope.city_select.replace('台','臺');
+                  
+                  if (city_weather[go_city]) {
+                        var info_w = city_weather[go_city].split('||');
+                        $scope.weather_infoshow = $sce.trustAsHtml(go_city + ' 今日天氣' + "<BR/>" + "溫度 : " + info_w[0] + "下雨機率 : " + info_w[1]);
+                  } else {
+                        $scope.weather_infoshow = "";
+                  }
+
+
+
             };
       });
 
@@ -27,6 +40,56 @@
                   'center': '台灣',
                   'zoom': 7,
                   // 'marker': dataset
+            });
+
+            var get_city = $.get("http://www.cwb.gov.tw/V7/forecast/f_index.htm", function (data) {
+                  /* data.responseText即為所在該URL的網頁內容 */
+                  //console.log(data);
+                  var text_dom = data.responseText;
+                  var weather_tb = text_dom.match(/<tbody>(.)*<\/tbody>/g);
+                  //$('body').html($(weather_tb).html());
+
+                  for (var i in weather_tb) {
+
+                        var search = weather_tb[i].match(/<a\b[^>]*>([\s\S]*?)<\/a>/gm);
+                        //console.log(search);
+                        var x = 1;
+                        var now_city = "";
+                        for (var j in search) {
+
+
+                              if (x % 4 == 0) {
+                                    x = 1;
+                                    now_city = "";
+                                    continue;
+                              }
+
+
+                              var search2 = search[j].match(/<a[^>]*>([\s\S]*?)<\/a>/);
+                              if (x == 1) {
+                                    now_city = search2[1];
+                                    //console.log(search2[1]);
+                              }
+                              if (x == 1 && !city[search2[1]]) {
+                                    city[search2[1]];
+                              }
+
+                              if (x == 2) {
+                                    city_weather[now_city] = search2[1];
+                              }
+                              if (x == 3) {
+                                    city_weather[now_city] += "||" + search2[1];
+                              }
+                              x++;                       	 		
+                              //console.log(search2);
+                        }
+
+
+
+
+                  }
+
+                 // console.log(city_weather);
             });
 
 
@@ -101,7 +164,9 @@
                         }
                   });
             });
-            $.when(datajson, datajson2, datajson3).done(function () {
+
+
+            $.when(map, get_city, datajson, datajson2, datajson3).done(function () {
 
                   $(".bs-docs-featurette-title").click(function () {
                         map.tinyMap('clear');
@@ -138,7 +203,7 @@
                         marker: city[select_scope.city_select]
                   });
                   map.tinyMap('panTo', select_scope.city_select);
-                  select_scope.$apply();
+                  //select_scope.$apply();
 
             });
       });

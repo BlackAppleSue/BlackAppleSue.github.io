@@ -41,6 +41,7 @@
   <script type="text/javascript" src="ui/jquery.ui.map.js"></script>
   <script type="text/javascript" src="js/map.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+  <script type="text/javascript" src="js/cross.js"></script>
   <script src="js/map_index.js"></script>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -113,17 +114,18 @@
     </div>
     <BR>
     <div class="bs-docs-featurette" ng-app="app">
-      <div class="container">
+      <div class="container" ng-controller="select">
         <div class="col-md-4">
-          <select ng-controller="select" class="form-control" ng-change="change_map()" ng-model="city_select">
+          <select class="form-control" ng-change="change_map()" ng-model="city_select">
             <option value="{{key}}" ng-repeat="(key, value) in citys">{{key}}</option>
           </select>
         </div>
         <BR>
-        
-        <!--<h2 class="bs-docs-featurette-title">Built with Bootstrap.</h2>
-        <p class="lead">Millions of amazing sites across the web are being built with Bootstrap. Get started on your own with our growing
-          <a href="../getting-started/#examples">collection of examples</a> or by exploring some of our favorites.</p>-->
+
+        <h2 class="bs-docs-featurette-title">{{city_select}}</h2>
+        <p class="lead" ng-bind-html="weather_infoshow">
+          {{weather_infoshow}}
+        </p>
 
         <!--<hr class="half-rule">
 
@@ -157,7 +159,7 @@
 
         <hr class="half-rule">
 
-        
+
       </div>
     </div>
 
