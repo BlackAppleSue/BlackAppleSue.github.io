@@ -25,7 +25,10 @@
                   //alert(1);
                   
                   var go_city = $scope.city_select.replace('台', '臺');
-
+                  if($scope.city_select == "桃園縣"){
+                        go_city = "桃園市";
+                  }
+                  //console.log(city_weather);
                   if (city_weather[go_city]) {
                         var info_w = city_weather[go_city].split('||');
                         $scope.weather_infoshow = $sce.trustAsHtml(go_city + ' 今日天氣' + "<BR/>" + "溫度 : " + info_w[0] + "下雨機率 : " + info_w[1]);
